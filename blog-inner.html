@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimalism in Modern Web Design | Creative Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #a29bfe;
+            --dark: #2d3436;
+            --light: #f5f6fa;
+            --card-bg: #ffffff;
+            --shadow: rgba(108, 92, 231, 0.2);
+            --text-color: #2d3436;
+            --bg-color: #f5f6fa;
+            --header-bg: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Dark Mode Variables */
+        [data-theme="dark"] {
+            --dark: #f5f6fa;
+            --light: #2d3436;
+            --card-bg: #1e272e;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --text-color: #f5f6fa;
+            --bg-color: #1e272e;
+            --header-bg: rgba(30, 39, 46, 0.9);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Theme Switcher */
+        .theme-switcher {
+            position: fixed;
+            right: 30px;
+            bottom: 30px;
+            z-index: 1000;
+        }
+
+        .theme-switcher-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 5px 15px var(--shadow);
+            transition: transform 0.3s;
+        }
+
+        .theme-switcher-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Header Styles */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 100px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: 0.5s;
+            background-color: var(--header-bg);
+        }
+
+        header.scrolled {
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            padding: 15px 100px;
+        }
+
+        header .logo {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 2em;
+            text-decoration: none;
+        }
+
+        header .logo span {
+            color: var(--text-color);
+        }
+
+        header .navigation {
+            position: relative;
+            display: flex;
+        }
+
+        header .navigation li {
+            list-style: none;
+            margin-left: 30px;
+        }
+
+        header .navigation li a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        header .navigation li a:hover {
+            color: var(--primary);
+        }
+
+        /* Main Content */
+        .main {
+            padding-top: 100px;
+        }
+
+        /* Article Hero */
+        .article-hero {
+            padding: 100px 100px 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .article-hero-image {
+            height: 500px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .article-hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .article-header {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .article-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+            color: var(--secondary);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .article-date {
+            display: flex;
+            align-items: center;
+        }
+
+        .article-date i {
+            margin-right: 5px;
+        }
+
+        .article-category {
+            display: inline-block;
+            padding: 5px 15px;
+            background-color: rgba(108, 92, 231, 0.1);
+            color: var(--primary);
+            border-radius: 30px;
+            font-weight: 500;
+        }
+
+        .article-title {
+            font-size: 3em;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .article-excerpt {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        /* Article Audio Player */
+        .article-audio-player {
+            max-width: 600px;
+            margin: 40px auto;
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+
+        .audio-player-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .audio-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.3s;
+            flex-shrink: 0;
+        }
+
+        .audio-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .audio-info {
+            flex-grow: 1;
+        }
+
+        .audio-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .audio-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9em;
+            color: var(--secondary);
+        }
+
+        .audio-progress {
+            width: 100%;
+            height: 6px;
+            background-color: rgba(108, 92, 231, 0.2);
+            border-radius: 3px;
+            margin-top: 10px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .audio-progress-filled {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0%;
+            background-color: var(--primary);
+            border-radius: 3px;
+        }
+
+        /* Article Content */
+        .article-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 100px 100px;
+        }
+
+        .article-content p {
+            margin-bottom: 20px;
+            font-size: 1.1em;
+        }
+
+        .article-content h2 {
+            font-size: 2em;
+            margin: 40px 0 20px;
+            color: var(--primary);
+        }
+
+        .article-content h3 {
+            font-size: 1.5em;
+            margin: 30px 0 15px;
+        }
+
+        .article-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin: 30px 0;
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+
+        .article-content blockquote {
+            border-left: 4px solid var(--primary);
+            padding-left: 20px;
+            margin: 30px 0;
+            font-style: italic;
+            color: var(--secondary);
+        }
+
+        .article-content ul, 
+        .article-content ol {
+            margin: 20px 0;
+            padding-left: 30px;
+        }
+
+        .article-content li {
+            margin-bottom: 10px;
+        }
+
+        /* Article Footer */
+        .article-footer {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 50px 100px;
+            border-top: 1px solid rgba(108, 92, 231, 0.2);
+        }
+
+        .article-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 5px 15px;
+            background-color: rgba(108, 92, 231, 0.1);
+            color: var(--primary);
+            border-radius: 30px;
+            font-size: 0.9em;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .tag:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .article-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s;
+        }
+
+        .nav-link:hover {
+            transform: translateX(5px);
+        }
+
+        .nav-link.prev:hover {
+            transform: translateX(-5px);
+        }
+
+        .nav-link i {
+            margin: 0 10px;
+        }
+
+        /* Related Articles */
+        .related-articles {
+            padding: 50px 100px;
+            background-color: var(--card-bg);
+        }
+
+        .section-title {
+            margin-bottom: 50px;
+            text-align: center;
+        }
+
+        .section-title h2 {
+            font-size: 2.5em;
+            color: var(--text-color);
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title h2:after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 3px;
+            background: var(--primary);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .related-article {
+            background-color: var(--bg-color);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px var(--shadow);
+            transition: transform 0.3s;
+        }
+
+        .related-article:hover {
+            transform: translateY(-10px);
+        }
+
+        .related-image {
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .related-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .related-article:hover .related-image img {
+            transform: scale(1.05);
+        }
+
+        .related-content {
+            padding: 20px;
+        }
+
+        .related-meta {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 0.8em;
+            color: var(--secondary);
+        }
+
+        .related-date {
+            margin-right: 15px;
+        }
+
+        .related-category {
+            display: inline-block;
+            padding: 3px 10px;
+            background-color: rgba(108, 92, 231, 0.1);
+            color: var(--primary);
+            border-radius: 30px;
+            font-size: 0.8em;
+        }
+
+        .related-title {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .related-excerpt {
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+
+        .related-link {
+            display: inline-flex;
+            align-items: center;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.9em;
+            gap: 5px;
+            text-decoration: none;
+        }
+
+        .related-link i {
+            transition: transform 0.3s;
+        }
+
+        .related-link:hover i {
+            transform: translateX(5px);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: var(--light);
+            padding: 50px 100px;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .social-icons {
+            margin-bottom: 20px;
+        }
+
+        .social-icons a {
+            color: var(--light);
+            font-size: 1.5em;
+            margin: 0 15px;
+            transition: 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: var(--primary);
+        }
+
+        .copyright {
+            margin-top: 20px;
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 1200px) {
+            .related-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 992px) {
+            header, header.scrolled {
+                padding: 20px 50px;
+            }
+            
+            .article-hero,
+            .article-content,
+            .article-footer,
+            .related-articles {
+                padding: 50px;
+            }
+            
+            .article-hero-image {
+                height: 400px;
+            }
+            
+            .article-title {
+                font-size: 2.5em;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header, header.scrolled {
+                padding: 20px 20px;
+            }
+            
+            header .navigation {
+                display: none;
+            }
+            
+            .article-hero,
+            .article-content,
+            .article-footer,
+            .related-articles {
+                padding: 50px 20px;
+            }
+            
+            .article-hero-image {
+                height: 300px;
+            }
+            
+            .article-title {
+                font-size: 2em;
+            }
+            
+            .article-navigation {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .article-hero-image {
+                height: 250px;
+            }
+            
+            .related-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .theme-switcher {
+                right: 20px;
+                bottom: 20px;
+            }
+
+            .theme-switcher-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 0.8em;
+            }
+            
+            .audio-player-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .audio-info {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <a href="index.html" class="logo">Portfolio<span>.</span></a>
+        <ul class="navigation">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="skills.html">Skills</a></li>
+            <li><a href="work.html">Work</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </header>
+
+    <!-- Theme Switcher -->
+    <div class="theme-switcher">
+        <button class="theme-switcher-btn" id="themeToggle">
+            <i class="fas fa-moon"></i>
+        </button>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Article Hero -->
+        <section class="article-hero">
+            <div class="article-hero-image">
+                <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1064&q=80" alt="Minimalism in Modern Web Design">
+            </div>
+            
+            <div class="article-header">
+                <div class="article-meta">
+                    <span class="article-date"><i class="far fa-calendar-alt"></i> June 5, 2023</span>
+                    <span class="article-category">UI/UX Design</span>
+                </div>
+                <h1 class="article-title">Minimalism in Modern Web Design</h1>
+                <p class="article-excerpt">How embracing simplicity can lead to more effective user experiences and better conversion rates.</p>
+            </div>
+            
+            <!-- Article Audio Player -->
+            <div class="article-audio-player">
+                <audio id="articleAudio" preload="metadata">
+                    <!-- Replace with your actual audio file -->
+                    <source src="https://example.com/audio/minimalism-in-web-design.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+                
+                <div class="audio-player-container">
+                    <button class="audio-btn" id="audioToggle">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <div class="audio-info">
+                        <div class="audio-title">Minimalism in Modern Web Design</div>
+                        <div class="audio-meta">
+                            <span id="currentTime">00:00</span>
+                            <span id="duration">00:00</span>
+                        </div>
+                        <div class="audio-progress" id="audioProgress">
+                            <div class="audio-progress-filled" id="audioProgressFilled"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Article Content -->
+        <article class="article-content">
+            <p>In today's fast-paced digital world, minimalism in web design has emerged as more than just an aesthetic choice—it's a philosophy that prioritizes user experience above all else. By stripping away unnecessary elements, we create interfaces that are intuitive, accessible, and focused on what truly matters.</p>
+            
+            <h2>The Principles of Minimalist Design</h2>
+            
+            <p>Minimalist web design is built on several core principles that work together to create harmonious digital experiences:</p>
+            
+            <h3>1. Negative Space</h3>
+            <p>Often called "white space" (though it doesn't have to be white), negative space gives elements room to breathe. This improves readability and creates visual hierarchy. Apple's website exemplifies this principle beautifully, with ample space around products that makes them the clear focal point.</p>
+            
+            <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80" alt="Negative space example">
+            
+            <h3>2. Limited Color Palette</h3>
+            <p>Restricting your color scheme to 2-3 primary colors creates visual cohesion. Dropbox's redesign demonstrates how a simple blue and white palette can feel fresh and modern while maintaining brand identity.</p>
+            
+            <h3>3. Typography as a Design Element</h3>
+            <p>With fewer visual elements competing for attention, typography takes center stage. The New York Times online edition shows how thoughtful type choices can create elegance and improve readability.</p>
+            
+            <blockquote>
+                "Perfection is achieved, not when there is nothing more to add, but when there is nothing left to take away." — Antoine de Saint-Exupéry
+            </blockquote>
+            
+            <h2>Benefits of Minimalist Design</h2>
+            
+            <p>Beyond aesthetics, minimalist design offers tangible benefits:</p>
+            
+            <ul>
+                <li><strong>Faster Load Times:</strong> Fewer elements mean smaller file sizes and quicker page loads, which directly impacts bounce rates and SEO.</li>
+                <li><strong>Improved Usability:</strong> Clear visual hierarchy guides users naturally through your content without overwhelming them.</li>
+                <li><strong>Higher Conversion Rates:</strong> By removing distractions, you focus attention on your primary calls to action.</li>
+                <li><strong>Better Mobile Experience:</strong> Minimal designs adapt more gracefully to smaller screens.</li>
+            </ul>
+            
+            <img src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1169&q=80" alt="Minimalist design on multiple devices">
+            
+            <h2>Implementing Minimalism Without Sacrificing Functionality</h2>
+            
+            <p>The challenge lies in balancing simplicity with necessary functionality. Here's how to achieve that balance:</p>
+            
+            <h3>1. Progressive Disclosure</h3>
+            <p>Reveal information and options as they become relevant. Google's search interface is the ultimate example—a single input field that expands to show additional options when needed.</p>
+            
+            <h3>2. Iconography</h3>
+            <p>Well-designed icons can replace text labels, saving space while remaining intuitive. The hamburger menu icon is now universally recognized for navigation.</p>
+            
+            <h3>3. Microinteractions</h3>
+            <p>Subtle animations provide feedback and guide users without cluttering the interface. The "like" animation on Twitter is a perfect example—simple but effective.</p>
+            
+            <p>As we move forward in 2023, minimalism continues to evolve. The trend is toward even more streamlined interfaces, with designers finding creative ways to hide complexity until it's needed. The key is remembering that minimalism isn't about removing things arbitrarily—it's about removing everything that doesn't serve the user's needs.</p>
+        </article>
+
+        <!-- Article Footer -->
+        <div class="article-footer">
+            <div class="article-tags">
+                <a href="#" class="tag">Design</a>
+                <a href="#" class="tag">UI/UX</a>
+                <a href="#" class="tag">Minimalism</a>
+                <a href="#" class="tag">Web Design</a>
+                <a href="#" class="tag">Trends</a>
+            </div>
+            
+            <div class="article-navigation">
+                <a href="#" class="nav-link prev"><i class="fas fa-chevron-left"></i> Previous Article: Creating a Cohesive Brand Identity</a>
+                <a href="#" class="nav-link next">Next Article: The Future of React in 2023 <i class="fas fa-chevron-right"></i></a>
+            </div>
+        </div>
+
+        <!-- Related Articles -->
+        <section class="related-articles">
+            <div class="section-title">
+                <h2>You Might Also Like</h2>
+            </div>
+            
+            <div class="related-grid">
+                <!-- Related Article 1 -->
+                <article class="related-article">
+                    <div class="related-image">
+                        <img src="https://images.unsplash.com/photo-1559028012-481c04fa702d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1136&q=80" alt="Related Article">
+                    </div>
+                    <div class="related-content">
+                        <div class="related-meta">
+                            <span class="related-date">June 15, 2023</span>
+                            <span class="related-category">Branding</span>
+                        </div>
+                        <h3 class="related-title">Creating a Cohesive Brand Identity</h3>
+                        <p class="related-excerpt">Learn how to develop a brand identity that communicates your values across all touchpoints.</p>
+                        <a href="#" class="related-link">Read Article <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+                
+                <!-- Related Article 2 -->
+                <article class="related-article">
+                    <div class="related-image">
+                        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Related Article">
+                    </div>
+                    <div class="related-content">
+                        <div class="related-meta">
+                            <span class="related-date">May 28, 2023</span>
+                            <span class="related-category">Development</span>
+                        </div>
+                        <h3 class="related-title">The Future of React in 2023</h3>
+                        <p class="related-excerpt">Exploring the latest features and best practices in React development.</p>
+                        <a href="#" class="related-link">Read Article <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+                
+                <!-- Related Article 3 -->
+                <article class="related-article">
+                    <div class="related-image">
+                        <img src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Related Article">
+                    </div>
+                    <div class="related-content">
+                        <div class="related-meta">
+                            <span class="related-date">April 10, 2023</span>
+                            <span class="related-category">Accessibility</span>
+                        </div>
+                        <h3 class="related-title">Designing for All Users</h3>
+                        <p class="related-excerpt">Practical strategies for creating inclusive digital experiences.</p>
+                        <a href="#" class="related-link">Read Article <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-behance"></i></a>
+                <a href="#"><i class="fab fa-dribbble"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#"><i class="fab fa-github"></i></a>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Creative Portfolio. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Theme Switcher
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        let darkMode = false;
+
+        // Check for saved theme preference or use prefers-color-scheme
+        if (localStorage.getItem('theme') === 'dark' || 
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            darkMode = true;
+            body.setAttribute('data-theme', 'dark');
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            darkMode = !darkMode;
+            if (darkMode) {
+                body.setAttribute('data-theme', 'dark');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.removeAttribute('data-theme');
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        // Header Scroll Effect
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            header.classList.toggle('scrolled', window.scrollY > 0);
+        });
+
+        // Audio Player Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const audio = document.getElementById('articleAudio');
+            const audioToggle = document.getElementById('audioToggle');
+            const audioProgress = document.getElementById('audioProgress');
+            const audioProgressFilled = document.getElementById('audioProgressFilled');
+            const currentTimeDisplay = document.getElementById('currentTime');
+            const durationDisplay = document.getElementById('duration');
+            
+            let isPlaying = false;
+            
+            // Format time display
+            function formatTime(seconds) {
+                const mins = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            }
+            
+            // Update time display
+            function updateTimeDisplay() {
+                currentTimeDisplay.textContent = formatTime(audio.currentTime);
+                durationDisplay.textContent = formatTime(audio.duration);
+            }
+            
+            // Update progress bar
+            function updateProgress() {
+                const progress = (audio.currentTime / audio.duration) * 100;
+                audioProgressFilled.style.width = `${progress}%`;
+                updateTimeDisplay();
+            }
+            
+            // Play/Pause toggle
+            audioToggle.addEventListener('click', function() {
+                if (isPlaying) {
+                    audio.pause();
+                    audioToggle.innerHTML = '<i class="fas fa-play"></i>';
+                } else {
+                    audio.play();
+                    audioToggle.innerHTML = '<i class="fas fa-pause"></i>';
+                }
+                isPlaying = !isPlaying;
+            });
+            
+            // Seek functionality
+            audioProgress.addEventListener('click', function(e) {
+                const rect = this.getBoundingClientRect();
+                const pos = (e.clientX - rect.left) / rect.width;
+                audio.currentTime = pos * audio.duration;
+            });
+            
+            // Update time when metadata is loaded
+            audio.addEventListener('loadedmetadata', function() {
+                updateTimeDisplay();
+            });
+            
+            // Update progress while playing
+            audio.addEventListener('timeupdate', updateProgress);
+            
+            // Reset when audio ends
+            audio.addEventListener('ended', function() {
+                isPlaying = false;
+                audioToggle.innerHTML = '<i class="fas fa-play"></i>';
+                audioProgressFilled.style.width = '0%';
+                audio.currentTime = 0;
+                updateTimeDisplay();
+            });
+            
+            // Initialize time display
+            updateTimeDisplay();
+        });
+    </script>
+</body>
+</html>

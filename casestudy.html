@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case Study | E-commerce Platform Redesign</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #a29bfe;
+            --dark: #2d3436;
+            --light: #f5f6fa;
+            --card-bg: #ffffff;
+            --shadow: rgba(108, 92, 231, 0.2);
+            --text-color: #2d3436;
+            --bg-color: #f5f6fa;
+            --header-bg: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Dark Mode Variables */
+        [data-theme="dark"] {
+            --dark: #f5f6fa;
+            --light: #2d3436;
+            --card-bg: #1e272e;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --text-color: #f5f6fa;
+            --bg-color: #1e272e;
+            --header-bg: rgba(30, 39, 46, 0.9);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Theme Switcher */
+        .theme-switcher {
+            position: fixed;
+            right: 30px;
+            bottom: 30px;
+            z-index: 1000;
+        }
+
+        .theme-switcher-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 5px 15px var(--shadow);
+            transition: transform 0.3s;
+        }
+
+        .theme-switcher-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Header Styles */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 100px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: 0.5s;
+            background-color: var(--header-bg);
+        }
+
+        header.scrolled {
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            padding: 15px 100px;
+        }
+
+        header .logo {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 2em;
+            text-decoration: none;
+        }
+
+        header .logo span {
+            color: var(--text-color);
+        }
+
+        header .navigation {
+            position: relative;
+            display: flex;
+        }
+
+        header .navigation li {
+            list-style: none;
+            margin-left: 30px;
+        }
+
+        header .navigation li a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        header .navigation li a:hover {
+            color: var(--primary);
+        }
+
+        /* Main Content */
+        .main {
+            padding-top: 100px;
+        }
+
+        /* Case Study Hero */
+        .case-hero {
+            padding: 150px 100px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .case-hero h1 {
+            font-size: 4em;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .case-hero p {
+            font-size: 1.2em;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            position: relative;
+            z-index: 2;
+            opacity: 0.9;
+        }
+
+        .case-meta {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 15px 30px;
+            border-radius: 30px;
+            backdrop-filter: blur(5px);
+        }
+
+        .meta-item h4 {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+
+        .meta-item p {
+            font-size: 1.1em;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        /* Case Content */
+        .case-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px;
+        }
+
+        .case-section {
+            margin-bottom: 80px;
+        }
+
+        .case-section h2 {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            color: var(--primary);
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .case-section h2:after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 3px;
+            background: var(--primary);
+            bottom: 0;
+            left: 0;
+        }
+
+        .case-section p {
+            margin-bottom: 20px;
+            font-size: 1.1em;
+        }
+
+        .case-section img {
+            width: 100%;
+            border-radius: 15px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px var(--shadow);
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+            margin: 40px 0;
+        }
+
+        .highlight-box {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px var(--shadow);
+            margin: 40px 0;
+        }
+
+        .highlight-box h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 50px 0;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 30px;
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+
+        .stat-card h3 {
+            font-size: 3em;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .stat-card p {
+            font-size: 1.1em;
+            color: var(--secondary);
+            font-weight: 600;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .gallery-item {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Testimonial */
+        .case-testimonial {
+            background-color: var(--card-bg);
+            padding: 60px;
+            border-radius: 15px;
+            margin: 80px 0;
+            position: relative;
+            box-shadow: 0 10px 30px var(--shadow);
+        }
+
+        .case-testimonial:before {
+            content: '"';
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            font-size: 5em;
+            color: var(--primary);
+            opacity: 0.1;
+            font-family: serif;
+            line-height: 1;
+        }
+
+        .case-testimonial p {
+            font-size: 1.3em;
+            font-style: italic;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .author-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .author-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .author-info h4 {
+            font-size: 1.3em;
+            margin-bottom: 5px;
+        }
+
+        .author-info p {
+            font-size: 0.9em;
+            color: var(--secondary);
+            font-style: normal;
+        }
+
+        /* Next Project */
+        .next-project {
+            background-color: var(--primary);
+            padding: 100px;
+            text-align: center;
+            color: white;
+        }
+
+        .next-project h2 {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+        }
+
+        .next-project p {
+            max-width: 700px;
+            margin: 0 auto 40px;
+            opacity: 0.9;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            background-color: white;
+            color: var(--primary);
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: var(--light);
+            padding: 50px 100px;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .social-icons {
+            margin-bottom: 20px;
+        }
+
+        .social-icons a {
+            color: var(--light);
+            font-size: 1.5em;
+            margin: 0 15px;
+            transition: 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: var(--primary);
+        }
+
+        .copyright {
+            margin-top: 20px;
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 1200px) {
+            .case-content {
+                padding: 100px 50px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            header, header.scrolled {
+                padding: 20px 50px;
+            }
+            
+            .case-hero {
+                padding: 150px 50px;
+            }
+            
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header, header.scrolled {
+                padding: 20px 20px;
+            }
+            
+            header .navigation {
+                display: none;
+            }
+            
+            .case-hero h1 {
+                font-size: 3em;
+            }
+            
+            .case-meta {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+            
+            .meta-item {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .case-testimonial {
+                padding: 40px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .case-hero, 
+            .case-content,
+            .next-project {
+                padding: 100px 20px;
+            }
+            
+            .case-hero h1 {
+                font-size: 2.5em;
+            }
+            
+            .case-section h2 {
+                font-size: 2em;
+            }
+            
+            footer {
+                padding: 50px 20px;
+            }
+
+            .theme-switcher {
+                right: 20px;
+                bottom: 20px;
+            }
+
+            .theme-switcher-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 0.8em;
+            }
+            
+            .next-project {
+                padding: 80px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <a href="index.html" class="logo">Portfolio<span>.</span></a>
+        <ul class="navigation">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="skills.html">Skills</a></li>
+            <li><a href="work.html">Work</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </header>
+
+    <!-- Theme Switcher -->
+    <div class="theme-switcher">
+        <button class="theme-switcher-btn" id="themeToggle">
+            <i class="fas fa-moon"></i>
+        </button>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Case Study Hero -->
+        <section class="case-hero">
+            <h1>E-commerce Platform Redesign</h1>
+            <p>Transforming an outdated e-commerce experience into a modern, conversion-optimized platform for Fashion Forward.</p>
+            
+            <div class="case-meta">
+                <div class="meta-item">
+                    <h4>Client</h4>
+                    <p>Fashion Forward</p>
+                </div>
+                <div class="meta-item">
+                    <h4>Category</h4>
+                    <p>Web Design & Development</p>
+                </div>
+                <div class="meta-item">
+                    <h4>Date</h4>
+                    <p>March 2023</p>
+                </div>
+                <div class="meta-item">
+                    <h4>Role</h4>
+                    <p>Lead Designer & Developer</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Case Study Content -->
+        <div class="case-content">
+            <!-- Overview Section -->
+            <section class="case-section">
+                <h2>Project Overview</h2>
+                <p>Fashion Forward, a mid-sized online clothing retailer, approached us with a challenge: their e-commerce platform was underperforming with high bounce rates and low conversion rates despite having quality products. The existing design was outdated, the user journey was confusing, and the mobile experience was particularly poor.</p>
+                
+                <div class="two-column">
+                    <div>
+                        <h3>The Challenge</h3>
+                        <p>The primary goals were to modernize the platform, streamline the purchasing process, and create a responsive design that would work seamlessly across all devices. We needed to maintain the brand's identity while significantly improving usability.</p>
+                    </div>
+                    <div>
+                        <h3>Our Approach</h3>
+                        <p>We conducted extensive user research, created detailed user personas, and developed a comprehensive redesign strategy focused on improving key metrics while preserving the brand's unique aesthetic.</p>
+                    </div>
+                </div>
+                
+                <img src="https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="E-commerce platform before and after">
+            </section>
+            
+            <!-- Research Section -->
+            <section class="case-section">
+                <h2>Research & Discovery</h2>
+                <p>We began with a thorough analysis of the existing platform, identifying pain points through analytics, heatmaps, and user testing sessions. Key findings included:</p>
+                
+                <div class="highlight-box">
+                    <ul>
+                        <li>43% of users abandoned their carts during checkout</li>
+                        <li>Mobile conversion rates were 60% lower than desktop</li>
+                        <li>Users reported difficulty finding specific products</li>
+                        <li>The search functionality had a 25% error rate</li>
+                        <li>Page load times averaged 4.2 seconds (industry benchmark is 2s)</li>
+                    </ul>
+                </div>
+                
+                <p>We conducted competitor analysis and identified several best practices that could be adapted to Fashion Forward's unique needs. User interviews revealed that customers valued high-quality product imagery and detailed sizing information above other features.</p>
+                
+                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="User research session">
+            </section>
+            
+            <!-- Design Process -->
+            <section class="case-section">
+                <h2>Design Process</h2>
+                <p>Our design process followed an iterative approach, with frequent testing and validation at each stage. We started with low-fidelity wireframes and progressively moved to high-fidelity prototypes.</p>
+                
+                <div class="gallery-grid">
+                    <div class="gallery-item">
+                        <img src="https://images.unsplash.com/photo-1593720213428-28a5b9e94613?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Wireframe">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1064&q=80" alt="Prototype">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1169&q=80" alt="UI Design">
+                    </div>
+                </div>
+                
+                <h3>Key Design Decisions</h3>
+                <p>We implemented several innovative solutions to address the identified issues:</p>
+                
+                <div class="two-column">
+                    <div>
+                        <h4>1. Simplified Navigation</h4>
+                        <p>Redesigned the category structure based on user behavior patterns, reducing the average time to find products by 40%.</p>
+                        
+                        <h4>2. Enhanced Product Pages</h4>
+                        <p>Created a more visual layout with zoom functionality, 360° views for select items, and a sticky "Add to Cart" section.</p>
+                    </div>
+                    <div>
+                        <h4>3. Streamlined Checkout</h4>
+                        <p>Reduced the checkout process from 5 steps to 2, with guest checkout as the default option.</p>
+                        
+                        <h4>4. Mobile-First Approach</h4>
+                        <p>Completely reimagined the mobile experience with larger touch targets and simplified interactions.</p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Results -->
+            <section class="case-section">
+                <h2>Results & Impact</h2>
+                <p>The redesigned platform launched after 4 months of development and was met with immediate positive feedback from both users and the client's internal team.</p>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>45%</h3>
+                        <p>Increase in conversion rate</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>32%</h3>
+                        <p>Reduction in bounce rate</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>60%</h3>
+                        <p>Increase in mobile conversions</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>1.8s</h3>
+                        <p>Average page load time (from 4.2s)</p>
+                    </div>
+                </div>
+                
+                <p>Beyond the metrics, the new design significantly improved the brand's perception. Customer satisfaction surveys showed a 28% increase in positive feedback regarding the shopping experience. The client reported that customer service inquiries related to website navigation dropped by 75% in the first month post-launch.</p>
+            </section>
+            
+            <!-- Testimonial -->
+            <div class="case-testimonial">
+                <p>"The redesign has completely transformed our business. Not only are we seeing significantly higher conversion rates, but our customers are spending more time exploring our collections. The team's attention to detail and deep understanding of e-commerce best practices made all the difference."</p>
+                
+                <div class="testimonial-author">
+                    <div class="author-avatar">
+                        <img src="https://randomuser.me/api/portraits/women/43.jpg" alt="Sarah Johnson">
+                    </div>
+                    <div class="author-info">
+                        <h4>Sarah Johnson</h4>
+                        <p>CEO, Fashion Forward</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Lessons Learned -->
+            <section class="case-section">
+                <h2>Lessons Learned</h2>
+                <p>This project reinforced several important lessons about e-commerce design:</p>
+                
+                <div class="highlight-box">
+                    <ol>
+                        <li><strong>Mobile matters more than ever:</strong> The dramatic improvement in mobile conversions showed how crucial mobile optimization is for modern e-commerce.</li>
+                        <li><strong>Speed is a feature:</strong> The performance improvements had an outsized impact on user engagement and conversions.</li>
+                        <li><strong>Checkout is critical:</strong> Simplifying the checkout process provided the single biggest boost to conversions.</li>
+                        <li><strong>Data should drive design:</strong> Our research-led approach ensured we solved real user problems rather than making assumptions.</li>
+                    </ol>
+                </div>
+                
+                <p>The success of this project has led to an ongoing partnership with Fashion Forward, with plans to implement additional features like AR try-on and personalized recommendations in future phases.</p>
+            </section>
+        </div>
+        
+        <!-- Next Project -->
+        <section class="next-project">
+            <h2>Ready to see the next project?</h2>
+            <p>Explore how we helped FitTech create an engaging mobile fitness experience that increased user retention by 65%.</p>
+            <a href="#" class="btn">View Fitness Tracker Case Study</a>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-behance"></i></a>
+                <a href="#"><i class="fab fa-dribbble"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#"><i class="fab fa-github"></i></a>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Creative Portfolio. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Theme Switcher
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        let darkMode = false;
+
+        // Check for saved theme preference or use prefers-color-scheme
+        if (localStorage.getItem('theme') === 'dark' || 
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            darkMode = true;
+            body.setAttribute('data-theme', 'dark');
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            darkMode = !darkMode;
+            if (darkMode) {
+                body.setAttribute('data-theme', 'dark');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.removeAttribute('data-theme');
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        // Header Scroll Effect
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            header.classList.toggle('scrolled', window.scrollY > 0);
+        });
+
+        // Animate sections on scroll
+        const caseSections = document.querySelectorAll('.case-section, .case-testimonial, .next-project');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        caseSections.forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(50px)';
+            section.style.transition = 'opacity 0.5s, transform 0.5s';
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>

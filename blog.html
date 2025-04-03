@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creative Portfolio | Blog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #a29bfe;
+            --dark: #2d3436;
+            --light: #f5f6fa;
+            --card-bg: #ffffff;
+            --shadow: rgba(108, 92, 231, 0.2);
+            --text-color: #2d3436;
+            --bg-color: #f5f6fa;
+            --header-bg: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Dark Mode Variables */
+        [data-theme="dark"] {
+            --dark: #f5f6fa;
+            --light: #2d3436;
+            --card-bg: #1e272e;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --text-color: #f5f6fa;
+            --bg-color: #1e272e;
+            --header-bg: rgba(30, 39, 46, 0.9);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Theme Switcher */
+        .theme-switcher {
+            position: fixed;
+            right: 30px;
+            bottom: 30px;
+            z-index: 1000;
+        }
+
+        .theme-switcher-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 5px 15px var(--shadow);
+            transition: transform 0.3s;
+        }
+
+        .theme-switcher-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Header Styles */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 100px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: 0.5s;
+            background-color: var(--header-bg);
+        }
+
+        header.scrolled {
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            padding: 15px 100px;
+        }
+
+        header .logo {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 2em;
+            text-decoration: none;
+        }
+
+        header .logo span {
+            color: var(--text-color);
+        }
+
+        header .navigation {
+            position: relative;
+            display: flex;
+        }
+
+        header .navigation li {
+            list-style: none;
+            margin-left: 30px;
+        }
+
+        header .navigation li a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        header .navigation li a:hover {
+            color: var(--primary);
+        }
+
+        /* Main Content */
+        .main {
+            padding-top: 100px;
+        }
+
+        /* Blog Hero */
+        .blog-hero {
+            padding: 150px 100px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .blog-hero h1 {
+            font-size: 4em;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .blog-hero p {
+            font-size: 1.2em;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            position: relative;
+            z-index: 2;
+            opacity: 0.9;
+        }
+
+        /* Blog Content */
+        .blog-content {
+            padding: 100px;
+            background-color: var(--bg-color);
+        }
+
+        .blog-container {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 50px;
+        }
+
+        /* Blog Posts */
+        .blog-posts {
+            display: grid;
+            gap: 50px;
+        }
+
+        .blog-post {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px var(--shadow);
+            transition: transform 0.3s;
+        }
+
+        .blog-post:hover {
+            transform: translateY(-10px);
+        }
+
+        .post-image {
+            height: 300px;
+            overflow: hidden;
+        }
+
+        .post-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .blog-post:hover .post-image img {
+            transform: scale(1.05);
+        }
+
+        .post-content {
+            padding: 30px;
+        }
+
+        .post-meta {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+            color: var(--secondary);
+        }
+
+        .post-date {
+            margin-right: 20px;
+        }
+
+        .post-category {
+            display: inline-block;
+            padding: 5px 15px;
+            background-color: rgba(108, 92, 231, 0.1);
+            color: var(--primary);
+            border-radius: 30px;
+            font-weight: 500;
+        }
+
+        .post-title {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+
+        .post-excerpt {
+            margin-bottom: 20px;
+        }
+
+        .read-more {
+            display: inline-flex;
+            align-items: center;
+            color: var(--primary);
+            font-weight: 600;
+            gap: 5px;
+        }
+
+        .read-more i {
+            transition: transform 0.3s;
+        }
+
+        .read-more:hover i {
+            transform: translateX(5px);
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 50px;
+            gap: 10px;
+        }
+
+        .page-link {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .page-link.active,
+        .page-link:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* Sidebar */
+        .blog-sidebar {
+            position: sticky;
+            top: 120px;
+            height: fit-content;
+        }
+
+        .sidebar-widget {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px var(--shadow);
+            margin-bottom: 30px;
+        }
+
+        .widget-title {
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary);
+            color: var(--primary);
+        }
+
+        .search-form {
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 15px;
+            padding-right: 45px;
+            border: 1px solid var(--secondary);
+            border-radius: 30px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .search-button {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+        }
+
+        .categories-list {
+            list-style: none;
+        }
+
+        .categories-list li {
+            margin-bottom: 10px;
+        }
+
+        .categories-list a {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 8px 0;
+            border-bottom: 1px dashed var(--secondary);
+            transition: color 0.3s;
+        }
+
+        .categories-list a:hover {
+            color: var(--primary);
+        }
+
+        .categories-list span {
+            background-color: rgba(108, 92, 231, 0.1);
+            color: var(--primary);
+            padding: 2px 10px;
+            border-radius: 30px;
+            font-size: 0.8em;
+        }
+
+        .popular-posts {
+            list-style: none;
+        }
+
+        .popular-post {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed var(--secondary);
+        }
+
+        .popular-post:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .popular-post-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 10px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .popular-post-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .popular-post-title {
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .popular-post-date {
+            font-size: 0.8em;
+            color: var(--secondary);
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 5px 15px;
+            background-color: rgba(108, 92, 231, 0.1);
+            color: var(--primary);
+            border-radius: 30px;
+            font-size: 0.8em;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .tag:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* Newsletter */
+        .newsletter-form {
+            margin-top: 20px;
+        }
+
+        .newsletter-input {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border: 1px solid var(--secondary);
+            border-radius: 30px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .newsletter-button {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .newsletter-button:hover {
+            background-color: #5649c5;
+        }
+
+        /* Featured Post */
+        .featured-post {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 50px;
+            box-shadow: 0 20px 50px var(--shadow);
+        }
+
+        .featured-image {
+            height: 400px;
+            overflow: hidden;
+        }
+
+        .featured-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .featured-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 40px;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            color: white;
+        }
+
+        .featured-category {
+            display: inline-block;
+            padding: 5px 15px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 30px;
+            font-size: 0.8em;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .featured-title {
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+
+        .featured-excerpt {
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        /* Section Styles */
+        .section-title {
+            margin-bottom: 50px;
+            text-align: center;
+        }
+
+        .section-title h2 {
+            font-size: 3em;
+            color: var(--text-color);
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title h2:after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 3px;
+            background: var(--primary);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: var(--light);
+            padding: 50px 100px;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .social-icons {
+            margin-bottom: 20px;
+        }
+
+        .social-icons a {
+            color: var(--light);
+            font-size: 1.5em;
+            margin: 0 15px;
+            transition: 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: var(--primary);
+        }
+
+        .copyright {
+            margin-top: 20px;
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 1200px) {
+            .blog-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .blog-sidebar {
+                grid-row: 1;
+                position: static;
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 30px;
+            }
+            
+            .featured-post {
+                grid-column: 1 / -1;
+            }
+        }
+
+        @media (max-width: 992px) {
+            header, header.scrolled {
+                padding: 20px 50px;
+            }
+            
+            .blog-hero, 
+            .blog-content {
+                padding: 100px 50px;
+            }
+            
+            .featured-image {
+                height: 350px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header, header.scrolled {
+                padding: 20px 20px;
+            }
+            
+            header .navigation {
+                display: none;
+            }
+            
+            .blog-hero h1 {
+                font-size: 3em;
+            }
+            
+            .blog-sidebar {
+                grid-template-columns: 1fr;
+            }
+            
+            .featured-title {
+                font-size: 1.5em;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .blog-hero, 
+            .blog-content {
+                padding: 100px 20px;
+            }
+            
+            .blog-hero {
+                padding: 120px 20px;
+            }
+            
+            .section-title h2 {
+                font-size: 2em;
+            }
+            
+            footer {
+                padding: 50px 20px;
+            }
+
+            .theme-switcher {
+                right: 20px;
+                bottom: 20px;
+            }
+
+            .theme-switcher-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 0.8em;
+            }
+            
+            .featured-image {
+                height: 250px;
+            }
+            
+            .featured-overlay {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <a href="index.html" class="logo">Portfolio<span>.</span></a>
+        <ul class="navigation">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="skills.html">Skills</a></li>
+            <li><a href="work.html">Work</a></li>
+            <li><a href="blog.html" class="active">Blog</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </header>
+
+    <!-- Theme Switcher -->
+    <div class="theme-switcher">
+        <button class="theme-switcher-btn" id="themeToggle">
+            <i class="fas fa-moon"></i>
+        </button>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Blog Hero -->
+        <section class="blog-hero">
+            <h1>My Blog</h1>
+            <p>Thoughts, tutorials, and insights about design, development, and creative process.</p>
+        </section>
+
+        <!-- Blog Content -->
+        <section class="blog-content">
+            <div class="blog-container">
+                <!-- Main Content Area -->
+                <div class="blog-posts">
+                    <!-- Featured Post -->
+                    <article class="featured-post">
+                        <div class="featured-image">
+                            <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1064&q=80" alt="Featured Post">
+                        </div>
+                        <div class="featured-overlay">
+                            <span class="featured-category">UI/UX Design</span>
+                            <h2 class="featured-title">Minimalism in Modern Web Design</h2>
+                            <p class="featured-excerpt">How embracing simplicity can lead to more effective user experiences and better conversion rates.</p>
+                            <a href="#" class="read-more">Read Article <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </article>
+                    
+                    <!-- Blog Post 1 -->
+                    <article class="blog-post">
+                        <div class="post-image">
+                            <img src="https://images.unsplash.com/photo-1559028012-481c04fa702d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1136&q=80" alt="Blog Post">
+                        </div>
+                        <div class="post-content">
+                            <div class="post-meta">
+                                <span class="post-date">June 15, 2023</span>
+                                <span class="post-category">Branding</span>
+                            </div>
+                            <h3 class="post-title">Creating a Cohesive Brand Identity</h3>
+                            <p class="post-excerpt">Learn how to develop a brand identity that communicates your values and resonates with your target audience across all touchpoints.</p>
+                            <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </article>
+                    
+                    <!-- Blog Post 2 -->
+                    <article class="blog-post">
+                        <div class="post-image">
+                            <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Blog Post">
+                        </div>
+                        <div class="post-content">
+                            <div class="post-meta">
+                                <span class="post-date">May 28, 2023</span>
+                                <span class="post-category">Development</span>
+                            </div>
+                            <h3 class="post-title">The Future of React in 2023</h3>
+                            <p class="post-excerpt">Exploring the latest features and best practices in React development, including server components and the new documentation.</p>
+                            <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </article>
+                    
+                    <!-- Blog Post 3 -->
+                    <article class="blog-post">
+                        <div class="post-image">
+                            <img src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Blog Post">
+                        </div>
+                        <div class="post-content">
+                            <div class="post-meta">
+                                <span class="post-date">April 10, 2023</span>
+                                <span class="post-category">Accessibility</span>
+                            </div>
+                            <h3 class="post-title">Designing for All Users</h3>
+                            <p class="post-excerpt">Practical strategies for creating inclusive digital experiences that work for everyone, regardless of ability.</p>
+                            <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </article>
+                    
+                    <!-- Pagination -->
+                    <div class="pagination">
+                        <a href="#" class="page-link active">1</a>
+                        <a href="#" class="page-link">2</a>
+                        <a href="#" class="page-link">3</a>
+                        <a href="#" class="page-link">4</a>
+                        <a href="#" class="page-link"><i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Sidebar -->
+                <aside class="blog-sidebar">
+                    <!-- Search Widget -->
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">Search</h3>
+                        <form class="search-form">
+                            <input type="text" class="search-input" placeholder="Search articles...">
+                            <button type="submit" class="search-button"><i class="fas fa-search"></i></button>
+                        </form>
+                    </div>
+                    
+                    <!-- Categories Widget -->
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">Categories</h3>
+                        <ul class="categories-list">
+                            <li><a href="#">UI/UX Design <span>12</span></a></li>
+                            <li><a href="#">Web Development <span>8</span></a></li>
+                            <li><a href="#">Branding <span>5</span></a></li>
+                            <li><a href="#">Accessibility <span>7</span></a></li>
+                            <li><a href="#">Mobile Design <span>4</span></a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Popular Posts Widget -->
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">Popular Posts</h3>
+                        <ul class="popular-posts">
+                            <li class="popular-post">
+                                <div class="popular-post-image">
+                                    <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1064&q=80" alt="Popular Post">
+                                </div>
+                                <div>
+                                    <h4 class="popular-post-title">Minimalism in Modern Web Design</h4>
+                                    <span class="popular-post-date">June 5, 2023</span>
+                                </div>
+                            </li>
+                            <li class="popular-post">
+                                <div class="popular-post-image">
+                                    <img src="https://images.unsplash.com/photo-1559028012-481c04fa702d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1136&q=80" alt="Popular Post">
+                                </div>
+                                <div>
+                                    <h4 class="popular-post-title">Creating a Cohesive Brand Identity</h4>
+                                    <span class="popular-post-date">June 15, 2023</span>
+                                </div>
+                            </li>
+                            <li class="popular-post">
+                                <div class="popular-post-image">
+                                    <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Popular Post">
+                                </div>
+                                <div>
+                                    <h4 class="popular-post-title">The Future of React in 2023</h4>
+                                    <span class="popular-post-date">May 28, 2023</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Tags Widget -->
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">Tags</h3>
+                        <div class="tags">
+                            <a href="#" class="tag">Design</a>
+                            <a href="#" class="tag">Development</a>
+                            <a href="#" class="tag">UI/UX</a>
+                            <a href="#" class="tag">JavaScript</a>
+                            <a href="#" class="tag">React</a>
+                            <a href="#" class="tag">Accessibility</a>
+                            <a href="#" class="tag">Branding</a>
+                            <a href="#" class="tag">Typography</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Newsletter Widget -->
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">Newsletter</h3>
+                        <p>Subscribe to get notified about new articles and resources.</p>
+                        <form class="newsletter-form">
+                            <input type="email" class="newsletter-input" placeholder="Your email address">
+                            <button type="submit" class="newsletter-button">Subscribe</button>
+                        </form>
+                    </div>
+                </aside>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-behance"></i></a>
+                <a href="#"><i class="fab fa-dribbble"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#"><i class="fab fa-github"></i></a>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Creative Portfolio. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Theme Switcher
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        let darkMode = false;
+
+        // Check for saved theme preference or use prefers-color-scheme
+        if (localStorage.getItem('theme') === 'dark' || 
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            darkMode = true;
+            body.setAttribute('data-theme', 'dark');
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            darkMode = !darkMode;
+            if (darkMode) {
+                body.setAttribute('data-theme', 'dark');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.removeAttribute('data-theme');
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        // Header Scroll Effect
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            header.classList.toggle('scrolled', window.scrollY > 0);
+        });
+
+        // Animate blog posts on scroll
+        const blogPosts = document.querySelectorAll('.blog-post');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        blogPosts.forEach(post => {
+            post.style.opacity = '0';
+            post.style.transform = 'translateY(50px)';
+            post.style.transition = 'opacity 0.5s, transform 0.5s';
+            observer.observe(post);
+        });
+    </script>
+</body>
+</html>

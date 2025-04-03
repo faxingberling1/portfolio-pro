@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --primary-dark: #5649c5;
+            --secondary: #a29bfe;
+            --dark: #2d3436;
+            --light: #f5f6fa;
+            --sidebar-bg: #2d3436;
+            --sidebar-text: #f5f6fa;
+            --header-bg: #ffffff;
+            --card-bg: #ffffff;
+            --shadow: rgba(108, 92, 231, 0.2);
+            --text-color: #2d3436;
+            --bg-color: #f5f6fa;
+            --error: #ff4757;
+            --success: #2ed573;
+            --warning: #ffa502;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 280px;
+            background-color: var(--sidebar-bg);
+            color: var(--sidebar-text);
+            padding: 20px 0;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .sidebar-brand {
+            padding: 0 20px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+
+        .sidebar-brand i {
+            font-size: 1.8em;
+            color: var(--primary);
+        }
+
+        .sidebar-brand h2 {
+            font-size: 1.3em;
+            margin: 0;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar-menu li {
+            position: relative;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--sidebar-text);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background-color: rgba(255,255,255,0.1);
+            color: var(--secondary);
+        }
+
+        .sidebar-menu a i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-menu .badge {
+            margin-left: auto;
+        }
+
+        .sidebar-submenu {
+            list-style: none;
+            padding-left: 40px;
+            display: none;
+        }
+
+        .sidebar-submenu a {
+            padding: 8px 20px;
+            font-size: 0.9em;
+        }
+
+        .sidebar-menu li.active .sidebar-submenu {
+            display: block;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+            transition: all 0.3s;
+        }
+
+        /* Header */
+        .header {
+            padding: 15px 30px;
+            background-color: var(--header-bg);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left h3 {
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .user-name {
+            font-weight: 500;
+        }
+
+        /* Cards */
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px var(--shadow);
+            margin-bottom: 30px;
+            background-color: var(--card-bg);
+        }
+
+        .card-header {
+            background-color: transparent;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-header h5 {
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        /* Dashboard Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-card {
+            padding: 20px;
+            border-radius: 10px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-card i {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .stat-value {
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stat-card .stat-label {
+            opacity: 0.9;
+            font-size: 0.9em;
+        }
+
+        .stat-card.primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+
+        .stat-card.success {
+            background: linear-gradient(135deg, var(--success) 0%, #7bed9f 100%);
+        }
+
+        .stat-card.warning {
+            background: linear-gradient(135deg, var(--warning) 0%, #ffbe76 100%);
+        }
+
+        .stat-card.danger {
+            background: linear-gradient(135deg, var(--error) 0%, #ff6b81 100%);
+        }
+
+        /* Tables */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th {
+            background-color: rgba(108, 92, 231, 0.1);
+            color: var(--primary);
+            font-weight: 600;
+            padding: 12px 15px;
+            text-align: left;
+        }
+
+        .table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            vertical-align: middle;
+        }
+
+        .table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .table tr:hover td {
+            background-color: rgba(108, 92, 231, 0.05);
+        }
+
+        .table-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 5px;
+            object-fit: cover;
+        }
+
+        /* Badges */
+        .badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.75em;
+        }
+
+        .badge-primary {
+            background-color: rgba(108, 92, 231, 0.1);
+            color: var(--primary);
+        }
+
+        .badge-success {
+            background-color: rgba(46, 213, 115, 0.1);
+            color: var(--success);
+        }
+
+        .badge-warning {
+            background-color: rgba(255, 165, 2, 0.1);
+            color: var(--warning);
+        }
+
+        .badge-danger {
+            background-color: rgba(255, 71, 87, 0.1);
+            color: var(--error);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: 500;
+            border: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn i {
+            font-size: 0.9em;
+        }
+
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 0.8em;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            color: white;
+        }
+
+        .btn-outline-primary {
+            background-color: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .btn-outline-primary:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+
+        .btn-danger {
+            background-color: var(--error);
+            color: white;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+            outline: none;
+        }
+
+        textarea.form-control {
+            min-height: 150px;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        /* Editor */
+        .editor-toolbar {
+            border: 1px solid #ddd;
+            border-bottom: none;
+            border-radius: 5px 5px 0 0;
+            padding: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .editor-content {
+            border: 1px solid #ddd;
+            border-radius: 0 0 5px 5px;
+            min-height: 300px;
+            padding: 15px;
+        }
+
+        /* File Upload */
+        .file-upload {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .file-upload-input {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-upload-label {
+            display: inline-block;
+            padding: 8px 15px;
+            background-color: #f5f6fa;
+            border: 1px dashed #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .file-upload-label:hover {
+            background-color: #e9ecef;
+        }
+
+        /* Alerts */
+        .alert {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid transparent;
+        }
+
+        .alert-success {
+            background-color: rgba(46, 213, 115, 0.1);
+            border-left-color: var(--success);
+            color: var(--success);
+        }
+
+        .alert-danger {
+            background-color: rgba(255, 71, 87, 0.1);
+            border-left-color: var(--error);
+            color: var(--error);
+        }
+
+        /* Tabs */
+        .nav-tabs {
+            border-bottom: 1px solid #ddd;
+        }
+
+        .nav-tabs .nav-link {
+            border: none;
+            color: var(--text-color);
+            font-weight: 500;
+            padding: 10px 20px;
+        }
+
+        .nav-tabs .nav-link.active {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            background-color: transparent;
+        }
+
+        /* Modal */
+        .modal-header {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .modal-footer {
+            border-top: none;
+            padding-top: 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .header {
+                padding: 15px;
+            }
+        }
+
+        /* Toggle Button */
+        .sidebar-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            color: var(--text-color);
+        }
+
+        @media (max-width: 992px) {
+            .sidebar-toggle {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-brand">
+            <i class="fas fa-cogs"></i>
+            <h2>Portfolio Admin</h2>
+        </div>
+        <ul class="sidebar-menu">
+            <li>
+                <a href="#" class="active">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Pages</span>
+                    <span class="badge badge-primary">5</span>
+                </a>
+                <ul class="sidebar-submenu">
+                    <li><a href="#">All Pages</a></li>
+                    <li><a href="#">Add New</a></li>
+                    <li><a href="#">Home Page</a></li>
+                    <li><a href="#">About Page</a></li>
+                    <li><a href="#">Contact Page</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fas fa-blog"></i>
+                    <span>Blog</span>
+                    <span class="badge badge-primary">12</span>
+                </a>
+                <ul class="sidebar-submenu">
+                    <li><a href="#">All Posts</a></li>
+                    <li><a href="#">Add New</a></li>
+                    <li><a href="#">Categories</a></li>
+                    <li><a href="#">Tags</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fas fa-briefcase"></i>
+                    <span>Portfolio</span>
+                    <span class="badge badge-primary">8</span>
+                </a>
+                <ul class="sidebar-submenu">
+                    <li><a href="#">All Projects</a></li>
+                    <li><a href="#">Add New</a></li>
+                    <li><a href="#">Categories</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fas fa-users"></i>
+                    <span>Users</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <button class="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h3>Dashboard</h3>
+            </div>
+            <div class="header-right">
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Admin">
+                    </div>
+                    <div class="user-name">Admin User</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="container-fluid py-4">
+            <!-- Stats Cards -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="stat-card primary">
+                        <i class="fas fa-eye"></i>
+                        <div class="stat-value">1,254</div>
+                        <div class="stat-label">Total Views</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card success">
+                        <i class="fas fa-blog"></i>
+                        <div class="stat-value">12</div>
+                        <div class="stat-label">Blog Posts</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card warning">
+                        <i class="fas fa-briefcase"></i>
+                        <div class="stat-value">8</div>
+                        <div class="stat-label">Portfolio Items</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card danger">
+                        <i class="fas fa-envelope"></i>
+                        <div class="stat-value">24</div>
+                        <div class="stat-label">New Messages</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Blog Posts -->
+            <div class="card">
+                <div class="card-header">
+                    <h5>Recent Blog Posts</h5>
+                    <a href="#" class="btn btn-primary btn-sm">
+                        <i class="fas fa-plus"></i> Add New
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Author</th>
+                                    <th>Categories</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <strong>Minimalism in Modern Web Design</strong>
+                                    </td>
+                                    <td>Admin</td>
+                                    <td>UI/UX</td>
+                                    <td>Jun 15, 2023</td>
+                                    <td><span class="badge badge-success">Published</span></td>
+                                    <td>
+                                        <a href="#" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="#" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Creating a Cohesive Brand Identity</strong>
+                                    </td>
+                                    <td>Admin</td>
+                                    <td>Branding</td>
+                                    <td>Jun 10, 2023</td>
+                                    <td><span class="badge badge-success">Published</span></td>
+                                    <td>
+                                        <a href="#" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="#" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>The Future of React in 2023</strong>
+                                    </td>
+                                    <td>Admin</td>
+                                    <td>Development</td>
+                                    <td>May 28, 2023</td>
+                                    <td><span class="badge badge-success">Published</span></td>
+                                    <td>
+                                        <a href="#" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="#" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Designing for All Users</strong>
+                                    </td>
+                                    <td>Admin</td>
+                                    <td>Accessibility</td>
+                                    <td>Apr 10, 2023</td>
+                                    <td><span class="badge badge-warning">Draft</span></td>
+                                    <td>
+                                        <a href="#" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="#" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Portfolio Items -->
+            <div class="card">
+                <div class="card-header">
+                    <h5>Recent Portfolio Items</h5>
+                    <a href="#" class="btn btn-primary btn-sm">
+                        <i class="fas fa-plus"></i> Add New
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Project</th>
+                                    <th>Client</th>
+                                    <th>Type</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" class="table-img me-3" alt="Project">
+                                            <strong>E-commerce Platform</strong>
+                                        </div>
+                                    </td>
+                                    <td>Fashion Forward</td>
+                                    <td>Web Design</td>
+                                    <td>Mar 15, 2023</td>
+                                    <td><span class="badge badge-success">Published</span></td>
+                                    <td>
+                                        <a href="#" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="#" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" class="table-img me-3" alt="Project">
+                                            <strong>Fitness Tracker App</strong>
+                                        </div>
+                                    </td>
+                                    <td>FitTech</td>
+                                    <td>Mobile App</td>
+                                    <td>Feb 28, 2023</td>
+                                    <td><span class="badge badge-success">Published</span></td>
+                                    <td>
+                                        <a href="#" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="#" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://images.unsplash.com/photo-1559028012-481c04fa702d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1136&q=80" class="table-img me-3" alt="Project">
+                                            <strong>Brew & Bean Branding</strong>
+                                        </div>
+                                    </td>
+                                    <td>Brew & Bean</td>
+                                    <td>Branding</td>
+                                    <td>Jan 15, 2023</td>
+                                    <td><span class="badge badge-success">Published</span></td>
+                                    <td>
+                                        <a href="#" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="#" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add New Content Section -->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Add New Blog Post</h5>
+                        </div>
+                        <div class="card-body">
+                            <form>
+                                <div class="form-group">
+                                    <label class="form-label">Title</label>
+                                    <input type="text" class="form-control" placeholder="Enter post title">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Category</label>
+                                    <select class="form-select">
+                                        <option>Select category</option>
+                                        <option>UI/UX Design</option>
+                                        <option>Web Development</option>
+                                        <option>Branding</option>
+                                        <option>Accessibility</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Featured Image</label>
+                                    <div class="file-upload">
+                                        <input type="file" id="featured-image" class="file-upload-input">
+                                        <label for="featured-image" class="file-upload-label">
+                                            <i class="fas fa-cloud-upload-alt"></i> Choose Image
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Content</label>
+                                    <div class="editor-toolbar">
+                                        <button type="button" class="btn btn-sm"><i class="fas fa-bold"></i></button>
+                                        <button type="button" class="btn btn-sm"><i class="fas fa-italic"></i></button>
+                                        <button type="button" class="btn btn-sm"><i class="fas fa-underline"></i></button>
+                                        <button type="button" class="btn btn-sm"><i class="fas fa-list-ul"></i></button>
+                                        <button type="button" class="btn btn-sm"><i class="fas fa-list-ol"></i></button>
+                                        <button type="button" class="btn btn-sm"><i class="fas fa-link"></i></button>
+                                        <button type="button" class="btn btn-sm"><i class="fas fa-image"></i></button>
+                                    </div>
+                                    <div class="editor-content" contenteditable="true">
+                                        <p>Start writing your blog post here...</p>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Publish Post</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Add New Portfolio Item</h5>
+                        </div>
+                        <div class="card-body">
+                            <form>
+                                <div class="form-group">
+                                    <label class="form-label">Project Title</label>
+                                    <input type="text" class="form-control" placeholder="Enter project title">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Client Name</label>
+                                    <input type="text" class="form-control" placeholder="Enter client name">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Project Type</label>
+                                    <select class="form-select">
+                                        <option>Select type</option>
+                                        <option>Web Design</option>
+                                        <option>Mobile App</option>
+                                        <option>Branding</option>
+                                        <option>UI/UX</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Project Images</label>
+                                    <div class="file-upload">
+                                        <input type="file" id="project-images" class="file-upload-input" multiple>
+                                        <label for="project-images" class="file-upload-label">
+                                            <i class="fas fa-cloud-upload-alt"></i> Upload Images
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Project Description</label>
+                                    <textarea class="form-control" rows="4" placeholder="Enter project description"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Add Project</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Toggle sidebar on mobile
+        document.querySelector('.sidebar-toggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        });
+
+        // Toggle submenus
+        const menuItems = document.querySelectorAll('.sidebar-menu li');
+        menuItems.forEach(item => {
+            if (item.querySelector('.sidebar-submenu')) {
+                item.addEventListener('click', function(e) {
+                    if (e.target.tagName === 'A' && e.target.parentElement === this) {
+                        this.classList.toggle('active');
+                        e.preventDefault();
+                    }
+                });
+            }
+        });
+
+        // Simulate form submission
+        const forms = document.querySelectorAll('form');
+        forms.forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Form submitted successfully!');
+                this.reset();
+            });
+        });
+
+        // For a real implementation, you would:
+        // 1. Connect to a backend API for data management
+        // 2. Implement proper form validation
+        // 3. Add authentication and authorization
+        // 4. Set up database connectivity
+        // 5. Implement file upload handling
+    </script>
+</body>
+</html>
